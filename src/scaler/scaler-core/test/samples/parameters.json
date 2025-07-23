@@ -1,0 +1,23 @@
+{
+  "units": "PROCESSING_UNITS",
+  "minSize": 2,
+  "maxSize": 8,
+  "stepSize": 1,
+  "overloadStepSize": 2,
+  "scaleOutCoolingMinutes": 5,
+  "scaleInCoolingMinutes": 5,
+  "scalingMethod": "FIXED",
+  "projectId": "my-cloudsql-project",
+  "instanceId": "autoscale-test",
+  "metrics": [
+    {
+      "name": "cpu",
+      "threshold": 65,
+      "value": 85.764282783144476,
+      "margin": 15
+    }
+  ],
+  "currentNodes": 0,
+  "currentSize": 100,
+  "regional": true
+}

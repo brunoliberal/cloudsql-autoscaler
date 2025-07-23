@@ -1,0 +1,11 @@
+[
+  {
+    "projectId": "basic-configuration",
+    "instanceId": "another-cloudsql1",
+    "scalerPubSubTopic": "projects/my-cloudsql-project/topics/cloudsql-scaling",
+    "units": "NODES",
+    "minSize": 5,
+    "maxSize": "30",
+    "scalingMethod": "DIRECT"
+  }
+]

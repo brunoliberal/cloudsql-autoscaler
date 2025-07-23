@@ -1,0 +1,65 @@
+steps:
+  - name: alpine:3
+    id: download-deps
+    entrypoint: sh
+    args:
+      - -eEuo
+      - pipefail
+      - -c
+      - |-
+        mkdir -p /builder/home/.local/bin
+        wget https://releases.hashicorp.com/terraform/${_TF_VERSION}/terraform_${_TF_VERSION}_linux_amd64.zip
+        unzip terraform_${_TF_VERSION}_linux_amd64.zip -d /builder/home/.local/bin
+        rm terraform_${_TF_VERSION}_linux_amd64.zip
+        chmod 755 /builder/home/.local/bin/terraform
+  - name: alpine/git
+    id: tf-init
+    dir: ${_AUTOSCALER_DIR}
+    entrypoint: sh
+    args:
+      - -eEuo
+      - pipefail
+      - -c
+      - |-
+        terraform init -no-color
+  - name: alpine:3
+    id: tf-check-validate
+    dir: ${_AUTOSCALER_DIR}
+    entrypoint: sh
+    args:
+      - -eEuo
+      - pipefail
+      - -c
+      - |-
+      - terraform fmt -recursive -check /workspace/
+        terraform validate -no-color
+  - name: alpine:3
+    id: tf-plan
+    dir: ${_AUTOSCALER_DIR}
+    entrypoint: sh
+    args:
+      - -eEuo
+      - pipefail
+      - -c
+      - |-
+        terraform plan -no-color -input=false -out plan.out
+  - name: alpine:3
+    id: tf-apply
+    dir: ${_AUTOSCALER_DIR}
+    entrypoint: sh
+    args:
+      - -eEuo
+      - pipefail
+      - -c
+      - |-
+        if [ $BRANCH_NAME == "main" ]; then
+          echo Running apply
+          terraform  apply -no-color -input=false plan.out
+        fi
+options:
+  env:
+    - PATH=/usr/local/bin:/usr/bin:/bin:/builder/home/.local/bin
+  logging: CLOUD_LOGGING_ONLY
+substitutions:
+  _TF_VERSION: 1.10.2
+  _AUTOSCALER_DIR: terraform/cloud-functions/per-project

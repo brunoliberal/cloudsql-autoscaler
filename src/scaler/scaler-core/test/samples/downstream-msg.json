@@ -1,0 +1,15 @@
+{
+  "projectId": "my-cloudsql-project",
+  "instanceId": "autoscale-test",
+  "currentSize": 2,
+  "suggestedSize": 6,
+  "units": "VCPU",
+  "metrics": [
+    {
+      "name": "cpu",
+      "threshold": 65,
+      "value": 85.764282783144476,
+      "margin": 15
+    }
+  ]
+}
